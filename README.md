@@ -48,6 +48,34 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
 Уже в 2024 году я купил себе 2 платы [Low profile PCIe x1 version](https://www.makerfabs.com/dual-edge-tpu-adapter.html) и 2 платы [m.2 BM version](https://www.makerfabs.com/dual-edge-tpu-adapter-m2-2280-b-m-key.html). Платы пришли и я установил в свои компьютеры, есть доступ к обоим EdgeTPU.
 
+Вторая часть будет связана с Ansible.
+С помощью Ansible будет установлен Docker, загружены docker-compose.yaml, загружены образы Docker - hass, frigate. Установлены драйверы для EdgeTPU.
+
+# Hardware
+
+Вот список используемого оборудования:
+
+|№| Наименование | Параметры|  
+|--|--|--|
+| 1 | HP EliteDesk G3 800 Mini  |CPU: Intel Core i3 8100, RAM 16GB, HDD - 1TB |
+| 2 | m.2 BM version  |M.2 2280 Adapter |
+| 3 | Dual EdgeTPU  |M.2 Adapter |
+| 4 | USB Flash Disk  |32GB |
+
+![Picture1](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8638_preview.png)
+![Picture2](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8639_preview.png)
+![Picture3](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8640_preview.png)
+![Picture4](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8641_preview.png)
+![Picture5](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8642_preview.png)
+![Picture6](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8643_preview.png)
+![Picture7](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8646_preview.png)
+
+# Software
+
+**TODO** 
+
+## Ubuntu
+
 В плане ОС я решил не слишком себе усложнять жизнь себе и будущим пользователям этих сервисов и решил установить ОС Ubuntu, на Docker поднять Home Assistant, Frigate NVR в рамках одного docker-compose.yaml. Так у них будет общая сеть и интеграция будет проще.
 
  Я не стал использовать системы виртуализации, это лишний слой абстракции.
@@ -69,6 +97,8 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 | opt_docker  | 4GB | opt_docker | /opt/docker |
 | opt_hass  | 8GB | opt_hass | /opt/hass |
 | opt_frigate  | 8GB | opt_docker | /opt/docker |
+
+Я всегда смогу увеличить разделы выделенные под Home Assistant, Frigate NVR. По мере необходимости, поэтому закрепил за этими разделами по 8 ГБ.
 
 Как пользоваться генераторами
 
@@ -101,33 +131,6 @@ sudo docker run -it --rm -v $(pwd):/app nurm.local/cloud-init-validator
 
 На этом первая часть работы будет закончена.
 
-Вторая часть будет связана с Ansible.
-С помощью Ansible будет установлен Docker, загружены docker-compose.yaml, загружены образы Docker - hass, frigate. Установлены драйверы для EdgeTPU.
-
-# Hardware
-
-Вот список используемого оборудования:
-
-|№| Наименование | Параметры|  
-|--|--|--|
-| 1 | HP EliteDesk G3 800 Mini  |CPU: Intel Core i3 8100, RAM 16GB, HDD - 1TB |
-| 2 | m.2 BM version  |M.2 2280 Adapter |
-| 3 | Dual EdgeTPU  |M.2 Adapter |
-| 4 | USB Flash Disk  |32GB |
-
-![Picture1](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8638_preview.png)
-![Picture2](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8639_preview.png)
-![Picture3](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8640_preview.png)
-![Picture4](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8641_preview.png)
-![Picture5](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8642_preview.png)
-![Picture6](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8643_preview.png)
-![Picture7](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8646_preview.png)
-
-# Software
-
-**TODO** 
-
-## Ubuntu
 
 ## Ansible
 
