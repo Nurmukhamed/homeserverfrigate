@@ -115,7 +115,6 @@ sudo docker run -it --rm -v $(pwd):/app nurm.local/cloud-init-validator
 | 3 | Dual EdgeTPU  |M.2 Adapter |
 | 4 | USB Flash Disk  |32GB |
 
-```
 ![Picture1](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8638_preview.png)
 ![Picture2](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8639_preview.png)
 ![Picture3](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8640_preview.png)
@@ -123,7 +122,7 @@ sudo docker run -it --rm -v $(pwd):/app nurm.local/cloud-init-validator
 ![Picture5](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8642_preview.png)
 ![Picture6](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8643_preview.png)
 ![Picture7](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8646_preview.png)
-```
+
 # Software
 
 **TODO** 
