@@ -149,4 +149,64 @@
         path: /var/log/audit
         device: format-lv_audit
         options: nodev,noexec,nosuid
+      - id: partition-lv_var_lib_docker
+        type: lvm_partition
+        name: lv_var_lib_docker
+        size: 4096M
+        volgroup: volgroup-sysvg
+      - id: format-lv_var_lib_docker
+        type: format
+        volume: partition-lv_var_lib_docker
+        label: VARLIBDOCKERFS
+        fstype: xfs
+      - id: mount-lv_var_lib_docker
+        type: mount
+        path: /var/lib/docker
+        device: format-lv_var_lib_docker
+        options: nodev,noexec,nosuid
+      - id: partition-opt_docker
+        type: lvm_partition
+        name: opt_docker
+        size: 4096M
+        volgroup: volgroup-sysvg
+      - id: format-opt_docker
+        type: format
+        volume: partition-opt_docker
+        label: OPTDOCKERFS
+        fstype: xfs
+      - id: mount-opt_docker
+        type: mount
+        path: /opt/docker
+        device: format-opt_docker
+        options: nodev,noexec,nosuid
+      - id: partition-opt_hass
+        type: lvm_partition
+        name: opt_hass
+        size: 8192M
+        volgroup: volgroup-sysvg
+      - id: format-opt_hass
+        type: format
+        volume: partition-opt_hass
+        label: OPTHASSFS
+        fstype: xfs
+      - id: mount-opt_hass
+        type: mount
+        path: /opt/hass
+        device: format-opt_hass
+        options: nodev,noexec,nosuid
+      - id: partition-opt_frigate
+        type: lvm_partition
+        name: opt_frigate
+        size: 8192M
+        volgroup: volgroup-sysvg
+      - id: format-opt_frigate
+        type: format
+        volume: partition-opt_frigate
+        label: OPTFRIGATEFS
+        fstype: xfs
+      - id: mount-opt_frigate
+        type: mount
+        path: /opt/frigate
+        device: format-opt_frigate
+        options: nodev,noexec,nosuid
 

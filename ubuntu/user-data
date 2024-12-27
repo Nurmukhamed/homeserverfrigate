@@ -1,0 +1,41 @@
+#cloud-config
+
+# Copyright 2023-2024 Broadcom. All rights reserved.
+# SPDX-License-Identifier: BSD-2
+
+# Ubuntu Server 22.04 LTS
+
+autoinstall:
+  version: 1
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+      - arches: [amd64, i386]
+        uri: http://archive.ubuntu.com/ubuntu
+      - arches: [default]
+        uri: http://ports.ubuntu.com/ubuntu-ports
+  early-commands:
+    - sudo systemctl stop ssh
+  locale: en_US
+  keyboard:
+    layout: us
+  identity:
+    hostname: elite02.nurm.local
+    username: support
+    password: $6$LniKey9QyoM1pxFA$y1JsGdnMPY45e6iQp7.NZXVzukt9VBDC16ogyiwzjZYP88vdfkZZlBoiH0HYJ8342cKeykA/KeLn9k/0Q6BRu.
+  ssh:
+    install-server: true
+    allow-pw: false
+  packages:
+    - openssh-server
+    - cloud-init
+  user-data:
+    disable_root: true
+    timezone: Asia/Aqtobe
+  late-commands:
+    - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
+    - echo 'support ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/support
+    - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/support
+    - curtin in-target --target=/target -- sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT=""/' /etc/default/grub
+    - curtin in-target --target=/target -- update-grub

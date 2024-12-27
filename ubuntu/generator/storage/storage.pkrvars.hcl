@@ -129,6 +129,42 @@ vm_disk_lvm = [
           options = "nodev,noexec,nosuid",
         },
       },
+      {
+        name = "opt_docker",
+        size = 4096,
+        format = {
+          label  = "OPTDOCKERFS",
+          fstype = "xfs",
+        },
+        mount = {
+          path    = "/opt/docker",
+          options = "nodev,noexec,nosuid",
+        },
+      },
+      {
+        name = "opt_hass",
+        size = 8192,
+        format = {
+          label  = "OPTHASSFS",
+          fstype = "xfs",
+        },
+        mount = {
+          path    = "/opt/hass",
+          options = "nodev,noexec,nosuid",
+        },
+      },
+      {
+        name = "opt_frigate",
+        size = 8192,
+        format = {
+          label  = "OPTFRIGATEFS",
+          fstype = "xfs",
+        },
+        mount = {
+          path    = "/opt/frigate",
+          options = "nodev,noexec,nosuid",
+        },
+      },
     ],
   }
 ]
