@@ -28,17 +28,17 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
 Но последние 4 года выдались очень трудными и многие вопросы я просто отправил в Backlog. Доставая оттуда по возможности, но всегда и везде и не в полном объеме.
 
-Летом 2022 года удалось раздобыть старый регистратор, прикупить несколько камер и в одном частном доме провести инженерные работы и установить камеры, подключить к видеорегистратору. Регистратор был 8 канальный коаксиальный. В онлайн регистратор не умел, но мне с домашнего компьютера удалось из VLC смотреть видео по RTSP.
+Весной 2023 года удалось раздобыть старый регистратор, прикупить несколько камер и в одном частном доме провести инженерные работы и установить камеры, подключить к видеорегистратору. Регистратор был 8 канальный коаксиальный. В онлайн регистратор не умел, но мне с домашнего компьютера удалось из VLC смотреть видео по RTSP.
 
 Кажется, тогда же я узнал, что есть Frigate NVR, который может получать RTSP сигнал и имеет интеграцию с HomeAssistant. Также в самом Frigate NVR есть много функционала, который меня подкупил.
 
 На Youtube каналах я узнал, что в 2022-2023 годах лучшим решением для будет БУ HP EliteDesk G3 800 Mini, который на ebay продается в комплекте за 50-70 долларов США. Отличная рекомендация подумал я и купил себе две штуки, с доставкой вышло в районе 100 долларов США за каждый компьютер в Алматы. Конфигурация была - Intel i3 8100/16GB RAM. На Amazon купил пару [SSD 2.5 1TB TeamGroup](https://www.amazon.com/dp/B0B5DLL773?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1), это была самая дешевая цена, я на них не сильно рассчитываю, но я уже купил 4 таких диска и они отлично работают.
 
-В 2022 году узнал о Google Coral AI EdgeTPU adapter - ускоритель тензорных (вот бы еще вспомнить что это такое из курса Алгебры с мехмата.) вычислений. Маленькая плата, на сайте несколько разных видов. Я выбрал [Dual EdgeTPU](https://coral.ai/products/m2-accelerator-dual-edgetpu/) , но они продавались только на немецком сайте, купил 2 штуки (это было в декабре 2022) и по какой-то причине на таможне Германии их завернули, я уже подумал что все сгорели деньги, на Ebay купил еще 2, эти из США приехали быстро. Но через месяц другой (кажется февраль 2023) позвонили с почты, попросили забрать посылку из Германии. Таким образом у меня оказалось 4 платы. В Frigate NVR можно настроить процесс определения образов на [EdgeTPU](https://docs.frigate.video/frigate/hardware/), что сильно разгружает сервер и ускоряет определение образов. 
+В 2023 году узнал о Google Coral AI EdgeTPU adapter - ускоритель тензорных (вот бы еще вспомнить что это такое из курса Алгебры с мехмата.) вычислений. Маленькая плата, на сайте несколько разных видов. Я выбрал [Dual EdgeTPU](https://coral.ai/products/m2-accelerator-dual-edgetpu/) , но они продавались только на немецком сайте, купил 2 штуки (это было в декабре 2023) и по какой-то причине на таможне Германии их завернули, я уже подумал что все сгорели деньги, на Ebay купил еще 2, эти из США приехали быстро. Но через месяц другой (кажется февраль 2024) позвонили с почты, попросили забрать посылку из Германии. Таким образом у меня оказалось 4 платы. В Frigate NVR можно настроить процесс определения образов на [EdgeTPU](https://docs.frigate.video/frigate/hardware/), что сильно разгружает сервер и ускоряет определение образов. 
 
 Имея в руках компьютер, SSD диски и EdgeTPU, я собрал компьютер, в слот m.2 WIFI воткнул плату и начал устанавливать по имеющимся в интернете мануалам Ubuntu. 
 
-Но у меня не получилось. Не получалось в течение года. Я думал, что возможно я что-то делаю неправильно. Ставил Ubuntu, Debian, Rocky Linux, с поддержкой UEFI и без, с включенным SecureBoot и без. Все это делал вечером после работы, раз в неделю или реже.
+Но у меня не получилось. Не получалось в течение 2024 года. Я думал, что возможно я что-то делаю неправильно. Ставил Ubuntu, Debian, Rocky Linux, с поддержкой UEFI и без, с включенным SecureBoot и без. Все это делал вечером после работы, раз в неделю или реже.
 
 Задавал вопросы на форумах, на Youtube - нет удачи. Но однажды я еще раз прочитал [тред](https://github.com/google-coral/edgetpu/issues/256#issuecomment-2499805291) и понял, что дело в моем компьютере, в слот m.2 WIFI можно поставить WIFI. Там же предложили решение - купить [эту плату](https://www.amazon.com/gp/product/B079NB8J3B/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1), на нее установить адаптер и установить в слот m.2 nvme.
 
@@ -116,13 +116,13 @@ sudo docker run -it --rm -v $(pwd):/app nurm.local/cloud-init-validator
 | 4 | USB Flash Disk  |32GB |
 
 ```
-![Picture1](./images/IMG_8638_preview.png)
-![Picture2](./images/IMG_8639_preview.png)
-![Picture3](./images/IMG_8640_preview.png)
-![Picture4](./images/IMG_8641_preview.png)
-![Picture5](./images/IMG_8642_preview.png)
-![Picture6](./images/IMG_8643_preview.png)
-![Picture7](./images/IMG_8646_preview.png)
+![Picture1](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8638_preview.png)
+![Picture2](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8639_preview.png)
+![Picture3](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8640_preview.png)
+![Picture4](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8641_preview.png)
+![Picture5](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8642_preview.png)
+![Picture6](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8643_preview.png)
+![Picture7](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8646_preview.png)
 ```
 # Software
 
