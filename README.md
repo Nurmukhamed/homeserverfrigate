@@ -32,9 +32,9 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
 Кажется, тогда же я узнал, что есть Frigate NVR, который может получать RTSP сигнал и имеет интеграцию с HomeAssistant. Также в самом Frigate NVR есть много функционала, который меня подкупил.
 
-На Youtube каналах я узнал, что в 2022-2023 годах лучшим решением для будет БУ HP EliteDesk G3 800 Mini, который на ebay продается в комплекте за 50-70 долларов США. Отличная рекомендация подумал я и купил себе две штуки, с доставкой вышло в районе 100 долларов США за каждый компьютер в Алматы. Конфигурация была - Intel i3 8100/16GB RAM. На Amazon купил пару SSD 2.5 1TB TeamGroup, это была самая дешевая цена, я на них не сильно рассчитываю, но я уже купил 4 таких диска и они отлично работают.
+На Youtube каналах я узнал, что в 2022-2023 годах лучшим решением для будет БУ HP EliteDesk G3 800 Mini, который на ebay продается в комплекте за 50-70 долларов США. Отличная рекомендация подумал я и купил себе две штуки, с доставкой вышло в районе 100 долларов США за каждый компьютер в Алматы. Конфигурация была - Intel i3 8100/16GB RAM. На Amazon купил пару [SSD 2.5 1TB TeamGroup](https://www.amazon.com/dp/B0B5DLL773?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1), это была самая дешевая цена, я на них не сильно рассчитываю, но я уже купил 4 таких диска и они отлично работают.
 
-В 2022 году узнал о Google Coral AI EdgeTPU adapter - ускоритель тензорных (вот бы еще вспомнить что это такое из курса Алгебры с мехмата.) вычислений. Маленькая плата, на сайте несколько разных видов. Я выбрал [Dual EdgeTPU](https://coral.ai/products/m2-accelerator-dual-edgetpu/) , но они продавались только на немецком сайте, купил 2 штуки (это было в декабре 2022) и по какой-то причине на таможне Германии их завернули, я уже подумал что все сгорели деньги, на Ebay купил еще 2, эти из США приехали быстро. Но через месяц другой (кажется февраль 2023) позвонили с почты, попросили забрать посылку из Германии. Таким образом у меня оказалось 4 платы.
+В 2022 году узнал о Google Coral AI EdgeTPU adapter - ускоритель тензорных (вот бы еще вспомнить что это такое из курса Алгебры с мехмата.) вычислений. Маленькая плата, на сайте несколько разных видов. Я выбрал [Dual EdgeTPU](https://coral.ai/products/m2-accelerator-dual-edgetpu/) , но они продавались только на немецком сайте, купил 2 штуки (это было в декабре 2022) и по какой-то причине на таможне Германии их завернули, я уже подумал что все сгорели деньги, на Ebay купил еще 2, эти из США приехали быстро. Но через месяц другой (кажется февраль 2023) позвонили с почты, попросили забрать посылку из Германии. Таким образом у меня оказалось 4 платы. В Frigate NVR можно настроить процесс определения образов на [EdgeTPU](https://docs.frigate.video/frigate/hardware/), что сильно разгружает сервер и ускоряет определение образов. 
 
 Имея в руках компьютер, SSD диски и EdgeTPU, я собрал компьютер, в слот m.2 WIFI воткнул плату и начал устанавливать по имеющимся в интернете мануалам Ubuntu. 
 
@@ -52,23 +52,83 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
  Я не стал использовать системы виртуализации, это лишний слой абстракции.
 
-Но ведь настроить ручками каждый раз каждый новый компьютер - это не чем гордится Lead DevOps Engineer. Поэтому решил уделить этому вопросу больше времени и автоматизировать процесс. Будем использовать packer, ansible.
+Но ведь настраивать ручками каждый раз каждый новый компьютер - это не то, чем гордится Lead DevOps Engineer. Поэтому решил уделить этому вопросу больше времени и автоматизировать процесс. Будем использовать packer, ansible.
 
 [Packer](https://developer.hashicorp.com/packer/install) использовать буду из-за готового [репозитория](https://github.com/vmware-samples/packer-examples-for-vsphere/tree/develop), которым я использовал для работы на прошлой работе и я очень доволен им.
-Весь репозитории мне не нужен, я взял только часть репозитория, которая генерирует шаблон cloud-init autoinstall для Ubuntu 22.04. Две части нужны для генерации сетевой конфигурации и хранилища данных. Авторы репозитория используют  [шаблон нарезки жесткого диска](https://github.com/vmware-samples/packer-examples-for-vsphere/blob/develop/tests/storage/test-lvm.pkrvars.hcl). Я же добавил еще пару logical volume lv
+Весь репозитории мне не нужен, я взял только часть репозитория, которая генерирует шаблон cloud-init autoinstall для Ubuntu 22.04. Две части нужны для генерации сетевой конфигурации и хранилища данных. Авторы репозитория используют  [шаблон нарезки жесткого диска](https://github.com/vmware-samples/packer-examples-for-vsphere/blob/develop/tests/storage/test-lvm.pkrvars.hcl). Я же добавил еще пару logical volume opt_docker, opt_hass, opt_frigate. В целом таблица разделов у меня выглядит следующим образом:
+
+|Name | Size | lvm_path| mount_path |
+|--|--|--|--|
+| lv_root  | 12GB | lv_root | / |
+| lv_home  | 4GB | lv_home | /home |
+| lv_opt  | 2GB | lv_opt | /opt |
+| lv_tmp  | 2GB | lv_tmp | /tmp |
+| lv_var  | 4GB | lv_var | /var |
+| lv_log  | 4GB | lv_log | /var/log |
+| lv_audit  | 4GB | lv_audit | /var/log/audit |
+| opt_docker  | 4GB | opt_docker | /opt/docker |
+| opt_hass  | 8GB | opt_hass | /opt/hass |
+| opt_frigate  | 8GB | opt_docker | /opt/docker |
+
+Как пользоваться генераторами
+
+```
+cd ubuntu/generator/storage
+vim storage.pkrvars.hcl
+./run.sh
+
+cd ../network
+vim network.pkrvars.hcl
+./run.sh
+
+cd ../..
+cat ./generator/storage/storage | tee -a user-data
+cat ./generator/network/network | tee -a user-data
+```
+
+Для проверки валидности полученного cloud-init файла можно собрать Dockerfile 
+
+```
+cd cloud-init-validator
+./build.sh
+cd ../
+sudo docker run -it --rm -v $(pwd):/app nurm.local/cloud-init-validator
+```
  
+ Если все нормально, теперь можно собрать из готового образа ISO новый образ ISO с cloud-init autoinstall. Все это хорошо описано в [этой статье](https://www.pugetsystems.com/labs/hpc/ubuntu-22-04-server-autoinstall-iso/).
+
+Собираем образ ISO, записываем на флешку, подключаем компьютер к сети, воткнем флешку и начинаем процесс установки. Обычно установка идет без ошибок и на выходе получаем минимальную ОС Ubuntu.
+
+На этом первая часть работы будет закончена.
+
+Вторая часть будет связана с Ansible.
+С помощью Ansible будет установлен Docker, загружены docker-compose.yaml, загружены образы Docker - hass, frigate. Установлены драйверы для EdgeTPU.
+
 # Hardware
 
+Вот список используемого оборудования:
+
+|№| Наименование | Параметры|  
+|--|--|--|
+| 1 | HP EliteDesk G3 800 Mini  |CPU: Intel Core i3 8100, RAM 16GB, HDD - 1TB |
+| 2 | m.2 BM version  |M.2 2280 Adapter |
+| 3 | Dual EdgeTPU  |M.2 Adapter |
+| 4 | USB Flash Disk  |32GB |
+
+```
+![Picture1](./images/IMG_8638_preview.png)
+![Picture2](./images/IMG_8639_preview.png)
+![Picture3](./images/IMG_8640_preview.png)
+![Picture4](./images/IMG_8641_preview.png)
+![Picture5](./images/IMG_8642_preview.png)
+![Picture6](./images/IMG_8643_preview.png)
+![Picture7](./images/IMG_8646_preview.png)
+```
 # Software
+
+**TODO** 
 
 ## Ubuntu
 
 ## Ansible
-
-A small repository to install Ubuntu 22.04 on HP EliteDesk G3 800 Mini, install Docker, Frigate NVR, Homeassistant, Google Coral AI EdgeTPU
-
-Links
-- https://www.pugetsystems.com/labs/hpc/ubuntu-22-04-server-autoinstall-iso/
-- https://github.com/vmware-samples/packer-examples-for-vsphere/tree/main/builds
-
 
