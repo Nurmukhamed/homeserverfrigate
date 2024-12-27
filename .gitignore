@@ -26,3 +26,7 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Do not include templates generator results
+ubuntu/generator/network/network
+ubuntu/generator/storage/storage
