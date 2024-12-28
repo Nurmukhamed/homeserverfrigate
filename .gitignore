@@ -30,3 +30,7 @@ Temporary Items
 # Do not include templates generator results
 ubuntu/generator/network/network
 ubuntu/generator/storage/storage
+
+# Do not include ssh keys
+ansible/image/ansible_key
+ansible/image/ansible_key.pub
