@@ -95,7 +95,7 @@ vm_disk_lvm = [
       },
       {
         name = "lv_var",
-        size = 4096,
+        size = 8192,
         format = {
           label  = "VARFS",
           fstype = "xfs",

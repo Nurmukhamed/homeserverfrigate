@@ -112,7 +112,7 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 | lv_home  | 4GB | lv_home | /home |
 | lv_opt  | 2GB | lv_opt | /opt |
 | lv_tmp  | 2GB | lv_tmp | /tmp |
-| lv_var  | 4GB | lv_var | /var |
+| lv_var  | 8GB | lv_var | /var |
 | lv_log  | 4GB | lv_log | /var/log |
 | lv_audit  | 4GB | lv_audit | /var/log/audit |
 | opt_docker  | 4GB | opt_docker | /opt/docker |
