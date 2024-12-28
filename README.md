@@ -105,13 +105,13 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
 **TODO** 
 
-## Ubuntu
-
 В плане ОС я решил не слишком себе усложнять жизнь себе и будущим пользователям этих сервисов и решил установить ОС Ubuntu, на Docker поднять Home Assistant, Frigate NVR в рамках одного docker-compose.yaml. Так у них будет общая сеть и интеграция будет проще.
 
  Я не стал использовать системы виртуализации, это лишний слой абстракции.
 
 Но ведь настраивать ручками каждый раз каждый новый компьютер - это не то, чем гордится Lead DevOps Engineer. Поэтому решил уделить этому вопросу больше времени и автоматизировать процесс. Будем использовать packer, ansible.
+
+## Packer
 
 [Packer](https://developer.hashicorp.com/packer/install) использовать буду из-за готового [репозитория](https://github.com/vmware-samples/packer-examples-for-vsphere/tree/develop), которым я использовал для работы на прошлой работе и я очень доволен им.
 Весь репозитории мне не нужен, я взял только часть репозитория, которая генерирует шаблон cloud-init autoinstall для Ubuntu 22.04. Две части нужны для генерации сетевой конфигурации и хранилища данных. Авторы репозитория используют  [шаблон нарезки жесткого диска](https://github.com/vmware-samples/packer-examples-for-vsphere/blob/develop/tests/storage/test-lvm.pkrvars.hcl). Я же добавил еще пару logical volume opt_docker, opt_hass, opt_frigate. В целом таблица разделов у меня выглядит следующим образом:
@@ -131,10 +131,14 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
 Я всегда смогу увеличить разделы выделенные под Home Assistant, Frigate NVR. По мере необходимости, поэтому закрепил за этими разделами по 8 ГБ.
 
+## Ubuntu
+
 Как пользоваться генераторами
 
 ```
-cd ubuntu/generator/storage
+export REPODIR=$(pwd)
+
+cd packer/generator/storage
 vim storage.pkrvars.hcl
 ./run.sh
 
@@ -142,9 +146,9 @@ cd ../network
 vim network.pkrvars.hcl
 ./run.sh
 
-cd ../..
-cat ./generator/storage/storage | tee -a user-data
-cat ./generator/network/network | tee -a user-data
+cd $REPODIR/ubuntu
+cat ../packer/generator/storage/storage | tee -a user-data
+cat ../packer/generator/network/network | tee -a user-data
 ```
 
 Для проверки валидности полученного cloud-init файла можно собрать Dockerfile 
@@ -162,10 +166,54 @@ sudo docker run -it --rm -v $(pwd):/app nurm.local/cloud-init-validator
 
 На этом первая часть работы будет закончена.
 
-
 ## Ansible
 
 Вторая часть будет связана с Ansible.
 С помощью Ansible будет установлен Docker, загружены docker-compose.yaml, загружены образы Docker - hass, frigate. Установлены драйверы для EdgeTPU.
 
+### Docker Image
+
+Для удобства я написал Dockerfile, который содержит в себе ansible. Позволяет один раз собрать образ, не засорять основную систему.
+К минусам отмечу, что внутри образа находится ssh ключ. Лучше такой образ не публиковать за пределы вашей сети.
+
+```
+cd $REPODIR/ansible/image
+ssh-keygen -t ed25519 -f ansible_key
+bash build.sh
+```
+
+Я не ставил себе задачу - полностью автоматизировать весь процесс. По мне пустая трата времени и ресурсов.
+
+Два плейбука - 1part, 2part. 
+Плейбуки также написаны так, чтоы просто запускаться и работать. Там без продвинутый магии - типа следить за идемпотентностью и все такое.
+
+### Установка Docker && EdgeTPU drivers
+
+```
+cd $REPODIR/ansible/playbooks/1part
+sudo docker --rm -it $(pwd):/app nurm.local/ansible 
+## Команды выполняются уже внутри контейнера.
+ssh-copy-id support@192.168.90.4
+cd /app
+ansible-playbook main.yaml
+
+## Reboot EliteDesk.
+ssh support@192.168.90.4 "sudo systemctl reboot"
+exit
+```
+
+### Установка контейнеров Home Assistant, Frigate, ESPHome, Mosquitto
+
+```
+cd $REPODIR/ansible/playbooks/2part
+sudo docker --rm -it $(pwd):/app nurm.local/ansible 
+## Команды выполняются уже внутри контейнера.
+cd /app
+ansible-playbook main.yaml
+exit
+```
+
+# Далее
+
+Теперь остается только загрузить рабочие конфиги для hass, frigate, mosquitto. Ну и наслаждаться работой этих сервисов.
 
