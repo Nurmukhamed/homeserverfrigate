@@ -41,16 +41,22 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 
 Имея в руках компьютер, SSD диски и EdgeTPU, я собрал компьютер, в слот m.2 WIFI воткнул плату и начал устанавливать по имеющимся в интернете мануалам Ubuntu. 
 
-Но у меня не получилось. Не получалось в течение 2024 года. Я думал, что возможно я что-то делаю неправильно. Ставил Ubuntu, Debian, Rocky Linux, с поддержкой UEFI и без, с включенным SecureBoot и без. Все это делал вечером после работы, раз в неделю или реже.
+**Но у меня не получилось**. Не получалось в течение 2024 года. Я думал, что возможно я что-то делаю неправильно. Ставил Ubuntu, Debian, Rocky Linux, с поддержкой UEFI и без, с включенным SecureBoot и без. Все это делал вечером после работы, раз в неделю или реже.
 
-Задавал вопросы на форумах, на Youtube - нет удачи. Но однажды я еще раз прочитал [тред](https://github.com/google-coral/edgetpu/issues/256#issuecomment-2499805291) и понял, что дело в моем компьютере, в слот m.2 WIFI можно поставить только WIFI. Там же предложили решение - купить [эту плату](https://www.amazon.com/gp/product/B079NB8J3B/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1), на нее установить адаптер и установить в слот m.2 nvme.
+Задавал вопросы на форумах, на Youtube - нет удачи. Но однажды я еще раз прочитал [тред](https://github.com/google-coral/edgetpu/issues/256#issuecomment-2499805291) и понял, что дело в моем компьютере, **в слот m.2 WIFI можно поставить только WIFI**. Там же предложили решение - купить [эту плату](https://www.amazon.com/gp/product/B079NB8J3B/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1), на нее установить адаптер и установить в слот m.2 nvme.
 
-Купил плату, получил плату, установил в компьютере и чудо - плата EdgeTPU появилась в Ubuntu прямо с первого раза. Но оказалось, что плата Dual EdgeTPU, в системе определяется только 1 EdgeTPU, а второй не видит.
+Купил плату, получил плату, установил в компьютере и чудо - плата EdgeTPU появилась в Ubuntu прямо с первого раза.
+
+**НО** особенность самой платы Dual EdgeTPU - это два PCI-устройства, которые делят одну шину PCI-Express. Плата-переходник может прокинуть на компьютер только **первое** устройство. А второе будет отсутствовать в системе. **Но я был согласен** и на такой вариант, работать в половину мощности от платы Dual EdgeTPU. Мне нужно было сделать [MVP](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
 Но и эта проблема тоже решаемая, один [разработчик](https://github.com/magic-blue-smoke) столкнулся с этой проблемой, понял в чем дело, разработал [несколько плат](https://github.com/magic-blue-smoke/Dual-Edge-TPU-Adapter). **Мое уважение!!**
 
-Уже в 2024 году я купил себе 2 платы [Low profile PCIe x1 version](https://www.makerfabs.com/dual-edge-tpu-adapter.html) и 2 платы [m.2 BM version](https://www.makerfabs.com/dual-edge-tpu-adapter-m2-2280-b-m-key.html). Платы пришли и я установил в свои компьютеры, есть доступ к обоим EdgeTPU.
+Уже во второй половине 2024 года я заказа  себе по 2 платы [Low profile PCIe x1 version](https://www.makerfabs.com/dual-edge-tpu-adapter.html) и 2 платы [m.2 BM version](https://www.makerfabs.com/dual-edge-tpu-adapter-m2-2280-b-m-key.html). Платы пришли и я установил в свои компьютеры, есть доступ к обоим EdgeTPU.
 
+Купил простую IP-камеру, на компьютере установил Docker, поднял контейнеры с Home Assistant, Frigate NVR. 
+
+Смог настроить систему и получить хоть какой-либо результат. 
+ 
 # Hardware
 
 Вот список используемого оборудования:
@@ -62,12 +68,27 @@ https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
 | 3 | Dual EdgeTPU  |M.2 Adapter |
 | 4 | USB Flash Disk  |32GB |
 
+Компьютер создан для установки VESA позади монитора. Размеры компьютера очень компактные.
+
 ![Picture1](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8638_preview.png)
 ![Picture2](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8639_preview.png)
 ![Picture3](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8640_preview.png)
+
+Чтобы получить доступ к компонентам, нужно сдвинуть зашелку в корме корпуса и сдвинуть крышку вперед. Со снятой крышкой это выглядит так.
+
 ![Picture4](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8641_preview.png)
+
+Диск 2.5 дюйма SATA крепится к корзине, без применения винтов, легко снимается.
+
 ![Picture5](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8642_preview.png)
+
+Нужна плоская отвертка и мелкая крестовая отвертка (обычно такие ложат в комплекте с NVME дисками и платами-переходниками с NVME на PCI-Express). Сперва откручиваем 3 винта с кулера,
+затем три винта, которые держат корзину. После этого доступ к M.2 разьемам открыт, можно поменять или провести иные процедуры. Слева черная плата-переходник, на которую установлена плата Dual EdgeTPU. Справа пустой разъем для установки модуля WIFI (или иного модуля, который совместим с этим компьютером. У меня нет данного списка).
+
 ![Picture6](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8643_preview.png)
+
+Слева - красная плата-переходник с Amazon. Справа - плата-переходник для установки Dual EdgeTPU в слот PCI-Express x1. 
+
 ![Picture7](https://github.com/Nurmukhamed/homeserverfrigate/blob/46bafa490fddeac40b2880fa28228926571442c2/images/IMG_8646_preview.png)
 
 # Software
