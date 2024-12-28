@@ -1,0 +1,59 @@
+name: homeassistantfrigate
+services:
+  esphome:
+    image: esphome/esphome:stable
+    container_name: esphome
+    volumes:
+      - /opt/hass/esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - '{{ server_ip }}:6052:6052'
+    restart: always
+    privileged: true
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable
+    container_name: frigate
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/frigate/config:/config
+      - /opt/frigate/db:/db
+      - /opt/frigate/storage:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - '{{ server_ip }}:8554:8554' # RTSP feeds
+      - '{{ server_ip }}:8555:8555/tcp' # WebRTC over tcp
+      - '{{ server_ip }}:8555:8555/udp' # WebRTC over udp
+      - '{{ server_ip }}:8971:8971'
+    restart: unless-stopped
+    devices:
+      - /dev/apex_0:/dev/apex_0 # Passes a PCIe Coral, follow driver instructions here https://coral.ai/docs/m2/get-started/#2a-on-linux
+      - /dev/apex_1:/dev/apex_1 # Passes a PCIe Coral, follow driver instructions here https://coral.ai/docs/m2/get-started/#2a-on-linux
+    privileged: true # this may not be necessary for all setups
+    shm_size: "64mb" # update for your cameras based on calculation above
+  homeassistant:
+    image: 'ghcr.io/home-assistant/home-assistant:stable'
+    container_name: homeassistant
+    volumes:
+      - /opt/hass/config:/config
+      - /opt/hass/db:/db
+      - /opt/hass/tls:/tls
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - '{{ server_ip }}:8123:8123'
+    restart: unless-stopped
+    privileged: true
+  mosquitto:
+    image: eclipse-mosquitto:2.0.20
+    container_name: mosquitto
+    volumes:
+      - /opt/hass/mosquitto/config:/mosquitto/config
+      - /opt/hass/mosquitto/data:/mosquitto/data
+      - /opt/hass/mosquitto/log:/mosquitto/log
+    ports:
+      - '{{ server_ip }}:1883:1883'
+      - '{{ server_ip }}:9001:9001'
+    restart: unless-stopped
+

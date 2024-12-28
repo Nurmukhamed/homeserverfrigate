@@ -1,0 +1,7 @@
+[elitedesk]
+192.168.90.4
+
+[elitedesk:vars]
+ansible_user=support
+ansible_port=22
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no'

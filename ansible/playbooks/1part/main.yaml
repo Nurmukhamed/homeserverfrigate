@@ -1,0 +1,75 @@
+---
+- name: Install Docker and EdgeTPU Drivers.
+  hosts: all
+  become: true
+
+  vars:
+    sysbox_package_url: "https://downloads.nestybox.com/sysbox/releases/v0.6.5/sysbox-ce_0.6.5-0.linux_amd64.deb"
+
+  pre_tasks:
+    - name: Update apt cache.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 600
+
+  tasks:
+    - name: Install sysbox package.
+      ansible.builtin.apt:
+        deb: "{{ sysbox_package_url }}"
+
+    - name: Install jq package.
+      ansible.builtin.apt:
+        name: jq
+        state: present
+
+    - name: Ensure that docker service is restarted.
+      ansible.builtin.systemd:
+        name: docker
+        state: restarted
+
+    - name: One way to avoid apt_key once it is removed from your distro, armored keys should use .asc extension, binary should use .gpg
+      block:
+        - name: Coral EdgeTPU | no apt key
+          ansible.builtin.get_url:
+            url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+            dest: /etc/apt/keyrings/coral-edge.asc
+
+        - name: Coral EdgeTPU | apt source
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/coral-edge.asc] https://packages.cloud.google.com/apt coral-edgetpu-stable main"
+            state: present
+
+    - name: Update apt cache.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 600
+
+    - name: Install apt packages for EdgeTPU.
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - gasket-dkms
+        - libedgetpu1-std
+
+    - name: Add udev rules file.
+      ansible.builtin.copy:
+        content: 'SUBSYSTEM=="apex", MODE="0660", GROUP="apex"'
+        dest: /etc/udev/rules.d/65-apex.rules
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Add group apex.
+      ansible.builtin.group:
+        name: apex
+        state: present
+
+    - name: Add support user to apex group.
+      ansible.builtin.user:
+        name: support
+        groups: apex
+        append: yes
+
+  roles:
+    - geerlingguy.docker
