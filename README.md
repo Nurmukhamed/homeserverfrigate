@@ -1,3 +1,11 @@
+# UPDATES
+
+## 2025-07-02
+
+* Добавлена конфигурация frigate. Включает в себя настройки записи, детекта, аудио, пример настроек камер со звуком и без звука.
+* Добавлена ссылка на брекет для карт PCI Express x1 в Aliexpress.
+* Добавлена ссылка на модель держателя VESA для HP EliteDessk.
+
 # Благодарности
 Большое спасибо пользователям интернета, форумов и других мест, за то что помогли мне понять как собрать домашний сервер на HP EliteDesk G3 800 Mini, ОС Ubuntu с поддержкой ускорителя Coral AI EdgeTPU.
 
@@ -18,6 +26,12 @@ https://github.com/vmware-samples/packer-examples-for-vsphere/tree/develop
 https://www.youtube.com/@HardwareHaven
 https://www.youtube.com/@apalrdsadventures
 https://www.youtube.com/watch?v=DmbFq5dMsFo&t=1s
+
+## Aliexpress
+https://aliexpress.ru/item/1005004003916975.html?spm=a2g2w.orderdetail.0.0.6f4b4aa6YL3dgk&sku_id=12000027709910083
+
+## Printables
+https://www.printables.com/model/1215343-vesa-wall-mount-02
 
 # Disclaimer
 

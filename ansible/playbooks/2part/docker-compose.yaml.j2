@@ -11,7 +11,7 @@ services:
     restart: always
     privileged: true
   frigate:
-    image: ghcr.io/blakeblackshear/frigate:stable
+    image: ghcr.io/blakeblackshear/frigate:0.15.1
     container_name: frigate
     volumes:
       - /etc/localtime:/etc/localtime:ro

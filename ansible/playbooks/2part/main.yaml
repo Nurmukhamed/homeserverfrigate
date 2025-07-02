@@ -9,6 +9,30 @@
       ansible.builtin.set_fact:
         server_ip: "{{ vars['ansible_eno1']['ipv4']['address'] }}"
 
+    - name: Ensure that /opt/frigate is exist.
+      ansible.builtin.file:
+        path: /opt/frigate
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Ensure that /opt/frigate/config is exist.
+      ansible.builtin.file:
+        path: /opt/frigate/config
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy template docker-compose.yaml.
+      ansible.builtin.template:
+        src: frigate-config.yaml.j2
+        dest: /opt/frigate/config/config.yaml
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Ensure that /opt/docker/main is exist.
       ansible.builtin.file:
         path: /opt/docker/main
