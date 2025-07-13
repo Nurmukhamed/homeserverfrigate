@@ -1,4 +1,10 @@
 # UPDATES
+## 2025-07-13
+
+* Добавлен [frigate-telegram](https://github.com/OldTyT/frigate-telegram). Простое приложение, которое позволяет отправлять в Telegram события из frigate.
+* Добавлен контейнер redis.
+* Версия frigate повышена до 0.16.0-beta3.
+* Отсылка сообщений происходит мимо home assistant, mosquitto. 
 
 ## 2025-07-02
 
@@ -20,6 +26,7 @@ https://github.com/home-assistant
 https://github.com/blakeblackshear/frigate
 https://github.com/magic-blue-smoke
 https://github.com/vmware-samples/packer-examples-for-vsphere/tree/develop
+https://github.com/OldTyT/frigate-telegram
 
 ## Youtube
 
@@ -216,7 +223,7 @@ ssh support@192.168.90.4 "sudo systemctl reboot"
 exit
 ```
 
-### Установка контейнеров Home Assistant, Frigate, ESPHome, Mosquitto
+### Установка контейнеров Home Assistant, Frigate, ESPHome, Mosquitto, Frigate-Telegram.
 
 ```
 cd $REPODIR/ansible/playbooks/2part
@@ -229,5 +236,8 @@ exit
 
 # Далее
 
-Теперь остается только загрузить рабочие конфиги для hass, frigate, mosquitto. Ну и наслаждаться работой этих сервисов.
+Теперь остается только загрузить рабочие конфиги для hass, frigate, mosquitto, frigate-telegram. Ну и наслаждаться работой этих сервисов.
 
+# Итого
+
+В двух сельских домах установлены регистраторы, подключены к интернету, созданы Телеграм каналы, куда отсылаются сообщения.

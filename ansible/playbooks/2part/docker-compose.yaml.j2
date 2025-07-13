@@ -56,4 +56,34 @@ services:
       - '{{ server_ip }}:1883:1883'
       - '{{ server_ip }}:9001:9001'
     restart: unless-stopped
-
+  redis:
+    image: redis:7.2.3-alpine3.18
+    restart: always
+    command:
+      - 'redis-server'
+      - '--save 900 1'
+      - '--save 300 10'
+      - '--save 60 100'
+#    volumes:
+#      - /mnt/docker/redis/data:/data
+  telegram:
+    image: ghcr.io/oldtyt/frigate-telegram:main-amd64-7e450ea
+    restart: always
+    ports:
+#      - '{{ server_ip }}:8080:8080'
+    environment:
+      TELEGRAM_BOT_TOKEN: 1234567890:ABCDEFGHEFGREHBTYJBTRGBER34T54Y54
+      FRIGATE_URL: http://frigate:5000
+      FRIGATE_EVENT_LIMIT: 5
+      DEBUG: True
+      TELEGRAM_CHAT_ID: "0"
+      SLEEP_TIME: 30
+      FRIGATE_EXTERNAL_URL: http://frigate:5000
+      TZ: Asia/Aqtobe
+      REDIS_ADDR: "redis:6379"
+      REST_API_ENABLE: False
+    volumes:
+      - type: tmpfs # Optional
+        target: /tmp
+        tmpfs:
+          size: 536870912
